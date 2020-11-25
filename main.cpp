@@ -18,7 +18,7 @@ int main(){
         
         switch(tipoUsuario){
             case '0': menuDocente(); cin.get(); cin.ignore(); break;
-            case '1': cout << "menu Estudiante" << endl; cin.get(); cin.ignore(); break;
+            case '1': cout << menuEstudiantes(); << endl; cin.get(); cin.ignore(); break;
             case '2': cout << "Salida del sistema" << endl; cin.get(); cin.ignore(); break;
             default: cout << "El caracter introducido no es valido. Escoja una de las tres opciones" << endl; cin.get(); cin.ignore();
         }
