@@ -1,0 +1,261 @@
+#include <string>
+#include <iostream>
+#include <stdlib.h>
+#include"Libreria_menu.h"
+using namespace std;
+
+// ESTRUCTURAS 
+
+struct Banco_pregunta{
+int codigopreg,tipo,solucionsm;
+bool solucionvf;
+string enun, opcionsm;
+struct  Banco_pregunta *prox;
+};
+typedef struct Banco_pregunta *bpregunta;
+
+struct Pregunta{
+double valorpreg,valoracum;
+bool respuestavf;
+int respsm;
+struct Pregunta *prox;
+bpregunta primepreg;
+};
+typedef struct Pregunta *tpregunta;
+
+struct Examen{
+string titulo, instruccion,codigoex; 
+int  cantpreg,posiex;
+double valorex,notaex;
+struct Examen *proxex;
+tpregunta *proxprg;
+};
+typedef struct Examen *texamen;
+
+texamen cabezaex=NULL, nodoexa=NULL;
+
+// PROTOTIPO DE FUNCIONES
+
+bool esVacia(texamen &cabezaex);
+texamen crear_nodo_examen ();
+void asignar_nodo(texamen &cabezaex,texamen &nodoexa);
+void crear_examen(texamen &nodoexa);
+void imprimir_listaex(texamen &cabezaex);
+
+//INT MAIN TENTATIVO
+int main(){
+int op,opa,posiex=0;
+
+do {
+ menu_examen(); 
+ cin>>op; 
+ switch (op)  {    
+  case 1:
+   nodoexa=crear_nodo_examen();
+   crear_examen(nodoexa);
+   asignar_nodo(cabezaex,nodoexa);
+   cout<<"        ****Datos agregados exitosamente****"<<endl;
+   cout<<"        ****Presione enter para continuar****"<<endl;
+   cin.get();   
+   break;
+   
+ 
+  case 2:
+   imprimir_listaex(cabezaex);
+   cout<<" "<<endl;
+   cout<<"        ****Presione enter para continuar****"<<endl;
+   cin.ignore();
+   cin.get();
+   break;
+   
+
+  case 3:
+   menu_preguntas();
+   cout<<" "<<endl;
+   cout<<"        ****Presione enter para continuar****"<<endl;
+   cin.ignore();
+   cin.get();
+   break;
+   
+    
+  case 4:
+   break;
+   
+ 
+  case 5:
+   break;
+   
+
+  default:
+   error();
+   break;
+  }  
+ } while (op!=5);
+
+   cin.ignore();
+   cin.get();
+   return 0;
+}
+
+
+////////                     Funciones y metodos de las estructuras
+
+/*void generar codigoex(texamen &nodoexa, int posiex){
+ texamen q= nodoexa;
+ string code= nodoexa;
+ .
+ .
+ return;
+}*/
+
+
+bool esVacia(texamen &cabezaex) {
+    bool log = false;
+    if (cabezaex == NULL) log = true;
+    return log;
+}
+
+texamen crear_nodo_examen (){
+  texamen q;
+  q = new (struct Examen);
+  q->cantpreg=0;
+  q->valorex=0;
+  q->notaex=0;
+  q->instruccion="-";
+  q->titulo="-";
+  q->proxex=NULL;
+  q->proxprg=NULL;
+  return q;
+}
+
+void asignar_nodo(texamen &cabezaex,texamen &nodoexa){
+ if(cabezaex==NULL){
+  cabezaex=nodoexa;
+  cout<<"toy en if de asignar"<<endl;
+  }
+ else{
+  nodoexa->proxex=cabezaex;
+  cabezaex=nodoexa;
+  cout<<"toy en else de asignar"<<endl;
+ }
+}
+
+/*void buscar_examen(texamen &cabezaex){
+ texamen q;
+ .
+ .
+ .
+ .
+ .
+ .
+ .
+ .
+ .
+ .
+
+}*/
+
+void imprimir_listaex(texamen &cabezaex){
+  texamen q=cabezaex;
+  int cont =1;
+  bool vali;
+  vali=esVacia(q);
+  if (vali)
+   cout<<"No existen examenes cargados en el sistema"<<endl;
+  else if (q->proxex==NULL){
+    cout<<"Titulo "<<q->titulo<<endl;
+    cout<<"Instruccion "<<q->instruccion<<endl;
+    cout<<"Cantidad de preguntas "<<q->cantpreg<<endl;
+    cout<<"Valor Parcial "<<q->valorex<<endl;
+  }
+  else{  
+   while (q != NULL){
+    cout<<cont<<endl;
+    cout<<"Titulo "<<q->titulo<<endl;
+    cout<<"Instruccion "<<q->instruccion<<endl;
+    cout<<"Cantidad de preguntas "<<q->cantpreg<<endl;
+    cout<<"Valor Parcial "<<q->valorex<<endl;
+    cout<<" "<<endl;
+    q=q->proxex;
+    cont++;
+   }   
+  }    
+}
+int validar_examen(bool valtitulo,bool valins,bool valcantpreg,bool valvalorex,bool valipreg){
+  int op;
+  if ((valtitulo=false)||(valins=false)||(valcantpreg=false)||(valvalorex=false)||(valipreg=false)){
+    system("cls");
+    cout<<"             *** Debe ingresar los siguientes campos obligatorios***  "<<endl;
+    cout<<" "<<endl;
+    if (valtitulo=false)
+     cout<<" **Titulo del examen**  "<<endl;
+    if (valins=false)
+     cout<<" **Instruccion del examen**  "<<endl;
+    if (valcantpreg=false)
+     cout<<" **Cantidad de preguntas del examen**  "<<endl;
+    if (valvalorex=false)
+     cout<<" **Valor porcentual del examen**  "<<endl;
+    if (valipreg=false)
+     cout<<" **Preguntas del examen**  "<<endl; 
+    cout<<" "<<endl;
+    cout<<"Seleccione:  "<<endl; 
+    cout<<"1. Continuar        2. Salir sin guardar  "<<endl; 
+    //Terminar leer opcion y retornarla
+  }
+
+}
+
+void crear_examen(texamen &nodoexa){
+ int opa; 
+ bool valtitulo=false,valins=false,valcantpreg=false,valvalorex=false,valipreg=false;
+ do{
+ menu_agregar_examen();
+ cin>>opa;  
+ switch (opa)  {    
+  case 1:
+   agregar_examen_msj(opa);
+   cin.ignore();  
+   getline(cin,nodoexa->titulo,'\n');
+   valtitulo=true;
+   break;
+    
+  case 2:
+   agregar_examen_msj(opa);
+   cin.ignore();  
+   getline(cin,nodoexa->instruccion,'\n');
+   valins=true;
+   break;
+   
+  case 3:
+   agregar_examen_msj(opa);
+   cin>>nodoexa->cantpreg;
+   valcantpreg=true;
+   break;
+      
+  case 4:
+  agregar_examen_msj(opa);
+  cin>>nodoexa->valorex;
+  valvalorex=true;
+   break;
+    
+  case 5:
+   agregar_examen_msj(opa);
+   cin>>opa;
+   valipreg=true;
+   break;
+   
+  case 6:
+   //validar_examen(bool valtitulo,bool valins,bool valcantpreg,bool valvalorex,bool valipreg);
+   cout<<"salida marca 6"<<endl;
+   cin>>opa;
+   break;
+  
+
+
+  default:
+   error();
+   break;
+   
+  }
+ }while(opa!=6);
+}
